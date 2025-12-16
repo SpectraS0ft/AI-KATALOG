@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="uz" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Katalog - Sun'iy Intellekt Vositalari</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #000000;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Gradient */
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.4), transparent 25%),
+                        radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.4), transparent 25%),
+                        radial-gradient(circle at 50% 80%, rgba(236, 72, 153, 0.2), transparent 40%);
+            animation: gradientMove 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes gradientMove {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            height: 100%; /* Ensure uniform height in grid */
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Transparent Button */
+        .btn-transparent {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-transparent:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: scale(1.05);
+        }
+
+        /* Neon Glow Text */
+        .text-glow {
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .category-title {
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Active Filter Button */
+        .filter-btn.active {
+            background-color: #a855f7; /* Purple 500 */
+            color: white;
+            border-color: #c084fcd0;
+            transform: scale(1.05);
+        }
+
+        .logo-img {
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+            transition: transform 0.3s ease;
+        }
+        .glass-card:hover .logo-img {
+            transform: scale(1.1);
+        }
+        
+        /* Ensure the sticky filter section stays right below the navbar */
+        .sticky-filter {
+            top: 4rem; /* Adjusted from top-20 to top-16 (64px) to stick right under the navbar */
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-purple-500 selection:text-white">
+
+    <!-- Background -->
+    <div class="gradient-bg"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 start-0 border-b border-white/10 bg-black/50 backdrop-blur-lg">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+                <span class="self-center text-2xl font-bold whitespace-nowrap text-white tracking-wider">AI <span class="text-purple-400">KATALOG</span></span>
+            </a>
+            <!-- Simplified nav, as filters now handle category display -->
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-[50vh] flex items-center justify-center text-center px-4 pt-24 pb-12">
+        <div class="max-w-4xl mx-auto space-y-6 z-10">
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
+                Eng kuchli <br />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 text-glow">Sun'iy Intellekt</span>
+                vositalari
+            </h1>
+            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                Matn, rasm, video va audio yaratish uchun AI vositalarini qidiring va filtrlang.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-10">
+
+        <!-- Search and Filter Section -->
+        <section class="mb-12 sticky sticky-filter z-40 bg-black/70 backdrop-blur-sm pt-4 pb-6 border-b border-white/10 -mx-4 px-4">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <!-- Search Bar -->
+                <input id="search-input" type="text" placeholder="AI vositasini qidirish (Masalan: ChatGPT, Gemini)" 
+                       class="w-full p-4 rounded-xl text-lg bg-white/10 border border-white/20 focus:border-purple-500 focus:ring focus:ring-purple-500/30 text-white placeholder-gray-400 transition-all">
+
+                <!-- Filter Buttons -->
+                <div id="filter-container" class="flex flex-wrap gap-3 justify-center">
+                    <button class="filter-btn btn-transparent px-5 py-2.5 rounded-full text-sm font-medium" data-tag="all">Barcha Vositalar</button>
+                    <button class="filter-btn btn-transparent px-5 py-2.5 rounded-full text-sm font-medium" data-tag="exams">Imtihon/Test</button>
+                    <button class="filter-btn btn-transparent px-5 py-2.5 rounded-full text-sm font-medium" data-tag="homework">Uyga vazifa/O'qish</button>
+                    <button class="filter-btn btn-transparent px-5 py-2.5 rounded-full text-sm font-medium" data-tag="programming">Dasturlash</button>
+                    <button class="filter-btn btn-transparent px-5 py-2.5 rounded-full text-sm font-medium" data-tag="project">Loyiha ishi</button>
+                    <button class="filter-btn btn-transparent px-5 py-2.5 rounded-full text-sm font-medium" data-tag="image_video">Rasm/Video Generatsiya</button>
+                    <button class="filter-btn btn-transparent px-5 py-2.5 rounded-full text-sm font-medium" data-tag="music">Musiqa Generatsiyasi</button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Dynamic Tools Container -->
+        <section class="scroll-mt-32">
+            <div id="tools-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Tools will be rendered here by JavaScript -->
+            </div>
+            <div id="no-results" class="hidden text-center text-gray-400 text-lg mt-16 p-8 rounded-xl border border-white/10 bg-white/5">
+                <p>⚠️ Hech qanday natija topilmadi. Filtrni o'zgartiring yoki boshqa so'z bilan qidiring.</p>
+            </div>
+        </section>
+
+        <!-- Hugging Face Section -->
+        <section class="mt-20 pt-10 border-t border-purple-500/30">
+            <div class="max-w-4xl mx-auto text-center p-8 bg-white/5 rounded-3xl border border-purple-500/30 shadow-lg">
+                <h2 class="text-3xl font-bold mb-4 text-glow text-purple-400">Ochiq Manbali Modellar</h2>
+                <p class="text-gray-300 mb-6">
+                    Tajriba o'tkazish, turli modellarni sinab ko'rish va AI tadqiqotlariga sho'ng'ish uchun:
+                </p>
+                <a href="https://huggingface.co/spaces" target="_blank" rel="noopener noreferrer" 
+                   class="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-full text-white bg-purple-600 hover:bg-purple-700 transition-transform transform hover:scale-105 shadow-xl shadow-purple-500/20">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm0-4h-2V7h2v7z"/></svg>
+                    Hugging Face Spaces'ga o'tish
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 bg-black/50 backdrop-blur-md mt-20">
+        <div class="max-w-7xl mx-auto py-12 px-4 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left">
+                <span class="text-2xl font-bold text-white tracking-wider">AI <span class="text-purple-400">KATALOG</span></span>
+                <p class="text-gray-500 text-sm mt-2">© 2025 Barcha huquqlar himoyalangan.</p>
+                <!-- NEW: SpectraSoft Team link -->
+                <p class="text-gray-600 text-xs mt-1">
+                    <span class="text-gray-500">Yaratildi:</span> 
+                    <a href="https://t.me/SpectraSoft_Team" target="_blank" rel="noopener noreferrer" 
+                       class="text-purple-400 hover:text-purple-300 transition-colors font-semibold">SpectraSoft Team</a>
+                </p>
+            </div>
+            <div class="flex space-x-6">
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">Maxfiylik siyosati</a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">Foydalanish shartlari</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const toolsData = [
+            // TEXT AI 
+            { id: "gemini", name: "Google Gemini (Pro/Flash)", url: "https://gemini.google.com", logoDomain: "gemini.google.com", description: "Google'ning eng ilg'or multimodal AI modeli (Gemini 3 Pro ekvivalenti).", category: "Matnli AI", tags: ["text", "exams", "homework", "programming", "project", "image_video"] },
+            { id: "chatgpt", name: "ChatGPT (5.2/5)", url: "https://chatgpt.com", logoDomain: "openai.com", description: "OpenAI tomonidan yaratilgan dunyodagi eng mashhur chatbot.", category: "Matnli AI", tags: ["text", "exams", "homework", "programming", "project", "image_video"] },
+            { id: "claude", name: "Claude", url: "https://claude.ai", logoDomain: "claude.ai", description: "Anthropic kompaniyasi mahsuloti. Katta kontekstli model.", category: "Matnli AI", tags: ["text", "programming", "project"] },
+            { id: "grok", name: "Grok", url: "https://x.ai", logoDomain: "x.ai", description: "X (Twitter) ma'lumotlaridan foydalanuvchi AI.", category: "Matnli AI", tags: ["text", "programming", "image_video"] },
+            { id: "deepseek", name: "DeepSeek (Latest)", url: "https://chat.deepseek.com", logoDomain: "deepseek.com", description: "Dasturlash va kodlash masalalarida kuchli.", category: "Matnli AI", tags: ["text", "exams", "programming"] },
+            
+            // --- UPDATED TEXT/STUDY AI ADDITIONS ---
+            { id: "perplexity", name: "Perplexity", url: "https://perplexity.ai", logoDomain: "perplexity.ai", description: "Manbalarga asoslangan, aniq javoblar beruvchi qidiruv chatboti.", category: "Matnli AI", tags: ["text", "exams", "project", "homework"] },
+            { id: "copilot", name: "Microsoft Copilot", url: "https://copilot.microsoft.com", logoDomain: "microsoft.com", description: "Microsoft vositalariga integratsiya qilingan AI yordamchisi.", category: "Matnli AI", tags: ["text", "programming", "project"] },
+            { id: "qwen", name: "Qwen", url: "https://qwen.aliyun.com/", logoDomain: "aliyun.com", description: "Alibaba'dan ochiq manbali va kuchli AI modeli.", category: "Matnli AI", tags: ["text", "programming"] },
+            { id: "meta", name: "Meta AI", url: "https://ai.meta.com/", logoDomain: "meta.com", description: "Facebook (Meta) tomonidan Instagram va WhatsApp'ga integratsiya qilingan.", category: "Matnli AI", tags: ["text"] },
+            { id: "notebooklm", name: "Google NotebookLM", url: "https://notebooklm.google/", logoDomain: "notebooklm.google", description: "Hujjatlar va tadqiqotlarni tahlil qilish uchun AI vositasi.", category: "O'quv/Tahlil AI", tags: ["homework", "project"] },
+            
+            // PROGRAMMING AI
+            { id: "blackbox", name: "Blackbox AI", url: "https://www.blackbox.ai/", logoDomain: "blackbox.ai", description: "Kodlash va avtomatik yakunlash uchun maxsus AI.", category: "Dasturlash AI", tags: ["programming"] },
+            { id: "replit", name: "Replit", url: "https://replit.com/ai", logoDomain: "replit.com", description: "Kodlash muhiti va AI bilan loyihalash uchun platforma.", category: "Dasturlash AI", tags: ["programming", "project"] },
+
+
+            // IMAGE/VIDEO AI
+            { id: "midjourney", name: "Midjourney", url: "https://midjourney.com", logoDomain: "midjourney.com", description: "Eng sifatli va badiiy AI rasmlari.", category: "Tasvir Generatsiyasi", tags: ["image", "image_video"] },
+            { id: "leonardo", name: "Leonardo AI", url: "https://leonardo.ai", logoDomain: "leonardo.ai", description: "O'yin aktivlari va portretlar yaratish.", category: "Tasvir Generatsiyasi", tags: ["image", "image_video"] },
+            { id: "deepai", name: "DeepAI", url: "https://deepai.org", logoDomain: "deepai.org", description: "Oddiy va tezkor tasvir yaratish.", category: "Tasvir Generatsiyasi", tags: ["image", "project", "image_video"] },
+            { id: "canva", name: "Canva Image", url: "https://canva.com/your-app", logoDomain: "canva.com", description: "Dizayn vositasiga integratsiya qilingan tasvir generatsiyasi.", category: "Tasvir Generatsiyasi", tags: ["image", "project", "image_video"] },
+            { id: "bing", name: "Microsoft Bing Image Creator", url: "https://www.bing.com/images/create", logoDomain: "bing.com", description: "DALL-E yordamida bepul tasvir generatsiyasi.", category: "Tasvir Generatsiyasi", tags: ["image", "image_video"] },
+            
+            // VIDEO AI
+            { id: "veo", name: "Google Veo", url: "https://veo.google", logoDomain: "google.com", description: "Yuqori aniqlikdagi va uzoq davom etadigan videolar yaratish.", category: "Video Generatsiyasi", tags: ["video", "image_video"] },
+            { id: "invideo", name: "InVideo AI", url: "https://invideo.io/", logoDomain: "invideo.io", description: "Matndan videoga o'tkazish va video tahrirlash uchun vosita.", category: "Video Generatsiyasi", tags: ["video", "image_video"] },
+            { id: "vheer", name: "Vheer AI", url: "https://vheer.com/app/image-to-video", logoDomain: "vheer.com", description: "Image-to-Video funksiyasiga ega video yaratish vositasi.", category: "Video Generatsiyasi", tags: ["video", "image_video"] },
+            { id: "kling", name: "Kling AI", url: "https://klingai.com", logoDomain: "klingai.com", description: "Yuqori sifatli harakatlar.", category: "Video Generatsiyasi", tags: ["video", "image_video"] },
+            { id: "wan", name: "Wan AI", url: "https://wan.video", logoDomain: "wan.video", description: "Alibaba video modeli.", category: "Video Generatsiyasi", tags: ["video", "image_video"] },
+            { id: "runway", name: "RunwayML", url: "https://runwayml.com", logoDomain: "runwayml.com", description: "Kino darajasidagi video tahrirlash.", category: "Video Generatsiyasi", tags: ["video", "image_video"] },
+
+            // MUSIC/AUDIO AI
+            { id: "suno", name: "Suno AI", url: "https://suno.ai", logoDomain: "suno.ai", description: "Matndan professional darajadagi qo'shiqlar (vokal va musiqa) yaratish.", category: "Musiqa Generatsiyasi", tags: ["music", "image_video"] },
+        ];
+
+        // Custom order definitions for specific tags
+        const toolOrder = {
+            exams: ["Google Gemini (Pro/Flash)", "ChatGPT (5.2/5)", "DeepSeek (Latest)", "Perplexity"], 
+            homework: ["Google Gemini (Pro/Flash)", "ChatGPT (5.2/5)", "Google NotebookLM", "Perplexity"], 
+            programming: ["Google Gemini (Pro/Flash)", "ChatGPT (5.2/5)", "Claude", "Grok", "DeepSeek (Latest)", "Microsoft Copilot", "Qwen", "Blackbox AI", "Replit"], 
+            project: ["ChatGPT (5.2/5)", "Claude", "Google Gemini (Pro/Flash)", "DeepAI", "Microsoft Copilot", "Perplexity", "Replit", "Canva Image", "Google NotebookLM"],
+            image_video: ["Google Gemini (Pro/Flash)", "Grok", "ChatGPT (5.2/5)"], 
+            music: ["Suno AI"],
+        };
+
+        const toolsContainer = document.getElementById('tools-container');
+        const searchInput = document.getElementById('search-input');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const noResults = document.getElementById('no-results');
+
+        let activeTag = 'all';
+
+        // --- Core Rendering Function ---
+        const renderTools = (tools) => {
+            toolsContainer.innerHTML = '';
+            
+            if (tools.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
+
+            tools.forEach(tool => {
+                const card = document.createElement('a');
+                card.href = tool.url;
+                card.target = "_blank";
+                card.rel = "noopener noreferrer";
+                card.className = "glass-card p-6 rounded-3xl group relative overflow-hidden";
+                
+                // Determine card color based on category/tag for visual variety
+                let hoverColor = 'hover:text-purple-400';
+                if (tool.category.includes('Matnli AI') || tool.category.includes('O\'quv') || tool.category.includes('Dasturlash')) hoverColor = 'hover:text-blue-400';
+                else if (tool.category.includes('Tasvir')) hoverColor = 'hover:text-pink-400';
+                else if (tool.category.includes('Video')) hoverColor = 'hover:text-red-400';
+                else if (tool.category.includes('Musiqa')) hoverColor = 'hover:text-lime-400'; // New color for music
+
+                card.innerHTML = `
+                    <div class="absolute top-0 right-0 p-4 opacity-50">
+                        <!-- External Link Icon -->
+                        <svg class="w-6 h-6 text-gray-400 group-hover:text-white group-hover:rotate-45 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </div>
+                    <img src="https://www.google.com/s2/favicons?sz=128&domain=${tool.logoDomain}" alt="${tool.name} Logo" 
+                         class="w-12 h-12 rounded-xl mb-4 logo-img ${tool.logoDomain === 'openai.com' || tool.logoDomain === 'claude.ai' ? 'bg-white p-1' : ''}">
+                    <h3 class="text-xl font-bold mb-1 ${hoverColor} transition-colors">${tool.name}</h3>
+                    <p class="text-gray-400 text-xs leading-normal">${tool.description}</p>
+                    <p class="mt-2 text-[10px] uppercase text-purple-300/50">${tool.category}</p>
+                `;
+                toolsContainer.appendChild(card);
+            });
+        };
+
+        // --- Filtering and Sorting Logic ---
+        const filterAndSortTools = () => {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            let filteredTools = toolsData.filter(tool => {
+                const matchesSearch = tool.name.toLowerCase().includes(searchTerm) || 
+                                      tool.description.toLowerCase().includes(searchTerm) ||
+                                      tool.category.toLowerCase().includes(searchTerm);
